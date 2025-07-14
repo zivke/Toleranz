@@ -1,0 +1,65 @@
+<resources>
+	<drawable-list id="backdrop" background="Graphics.COLOR_WHITE">
+		<shape type="circle" x="144" y="31" radius="35" color="Graphics.COLOR_BLACK" />
+		<shape type="rectangle" x="107" y="31" width="70" height="1" color="Graphics.COLOR_WHITE" />
+		<shape type="rectangle" x="0" y="0" width="176" height="26" color="Graphics.COLOR_BLACK" />
+		<shape type="rectangle" x="40" y="80" width="120" height="60" color="Graphics.COLOR_BLACK" />
+		<shape type="rectangle" x="0" y="150" width="176" height="26" color="Graphics.COLOR_BLACK" />
+	</drawable-list>
+	<layouts>
+		<layout id="MainLayout">
+			<drawable id="backdrop" />
+			<bitmap id="ClockIcon" x="38" y="6"
+				filename="..\..\resources\drawables\custom_clock_15px_wht_bo_bkgnd.png" />
+			<label id="clockValue" text="XX:XX" x="45%" y="12" color="Graphics.COLOR_WHITE"
+				font="Graphics.FONT_XTINY"
+				justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
+
+			<bitmap id="StopwatchIcon" x="3" y="45"
+				filename="..\..\resources\drawables\custom_stopwatch_21px_blk_no_bkgnd.png" />
+			<label id="stopwatchValue" text="00:00" x="63" y="52" color="Graphics.COLOR_BLACK"
+				font="Graphics.FONT_NUMBER_HOT"
+				justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
+
+			<bitmap id="MaxIcon" x="136" y="2"
+				filename="..\..\resources\drawables\custom_max_8x20px_wht_no_bkgnd.png" />
+			<label id="maximumValue" text="-" x="145" y="18"
+				color="Graphics.COLOR_WHITE"
+				font="Graphics.FONT_XTINY"
+				justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
+			<label id="minimumValue" text="-" x="145" y="43"
+				color="Graphics.COLOR_WHITE"
+				font="Graphics.FONT_XTINY"
+				justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
+			<bitmap id="MinIcon" x="136" y="55"
+				filename="..\..\resources\drawables\custom_min_8x20px_wht_no_bkgnd.png" />
+
+			<label id="maxChartValue" text="250" x="29" y="90"
+				color="Graphics.COLOR_BLACK"
+				font="Graphics.FONT_XTINY"
+				justification="Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER" />
+			<bitmap id="HeartSmallBlackIcon" x="10" y="100"
+				filename="..\..\resources\drawables\custom_heart_21px_blk_no_bkgnd.png" />
+			<bitmap id="ThermometerSmallBlackIcon" x="16" y="100"
+				filename="..\..\resources\drawables\custom_thermo_11x21px_blk_no_bkgnd.png" />
+			<label id="minChartValue" text="80" x="29" y="128"
+				color="Graphics.COLOR_BLACK"
+				font="Graphics.FONT_XTINY"
+				justification="Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER" />
+
+			<bitmap id="HeartSmallWhiteIcon" x="31" y="153"
+				filename="..\..\resources\drawables\custom_heart_21px_wht_no_bkgnd.png" />
+			<label id="currentHeartRateValue" text="-" x="53" y="161"
+				color="Graphics.COLOR_WHITE"
+				font="Graphics.FONT_TINY"
+				justification="Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER" />
+
+			<bitmap id="ThermometerSmallWhiteIcon" x="84" y="153"
+				filename="..\..\resources\drawables\custom_thermo_11x21px_wht_no_bkgnd.png" />
+			<label id="currentTemperatureValue" text="-" x="98" y="161"
+				color="Graphics.COLOR_WHITE"
+				font="Graphics.FONT_TINY"
+				justification="Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER" />
+		</layout>
+	</layouts>
+</resources>
