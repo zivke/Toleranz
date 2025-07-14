@@ -201,6 +201,8 @@ class ToleranzState {
 
     if (isRunning()) {
       var now = new Time.Moment(Time.now().value());
+
+      // NOTE: The _startTime cannot be null if the activity is already running
       _elapsedTime = now.subtract(_startTime) as Time.Duration;
 
       if (_currentHeartRate != null) {
@@ -246,7 +248,7 @@ class ToleranzState {
   }
 
   public function isRunning() as Boolean {
-    return !_status.hasError() && _status.getCode() == Status.RUNNING;
+    return _status.getCode() == Status.RUNNING;
   }
 
   public function getStatus() as Status {
