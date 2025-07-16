@@ -33,7 +33,7 @@
 			<bitmap id="MinIcon" x="136" y="55"
 				filename="..\..\resources\drawables\custom_min_8x20px_wht_no_bkgnd.png" />
 
-			<label id="maxChartValue" text="250" x="29" y="90"
+			<label id="maxChartValue" text="-" x="29" y="90"
 				color="Graphics.COLOR_BLACK"
 				font="Graphics.FONT_XTINY"
 				justification="Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER" />
@@ -41,7 +41,7 @@
 				filename="..\..\resources\drawables\custom_heart_21px_blk_no_bkgnd.png" />
 			<bitmap id="ThermometerSmallBlackIcon" x="16" y="100"
 				filename="..\..\resources\drawables\custom_thermo_11x21px_blk_no_bkgnd.png" />
-			<label id="minChartValue" text="80" x="29" y="128"
+			<label id="minChartValue" text="-" x="29" y="128"
 				color="Graphics.COLOR_BLACK"
 				font="Graphics.FONT_XTINY"
 				justification="Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER" />
