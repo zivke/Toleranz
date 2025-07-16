@@ -67,7 +67,7 @@ class ToleranzView extends WatchUi.View {
       if (minimumTemperatureLabel != null) {
         if (minimumTemperature != null) {
           minimumTemperatureLabel.setText(
-            minimumTemperature.format("%.1f") + "°"
+            Math.floor(minimumTemperature).toString()
           );
         } else {
           minimumTemperatureLabel.setText("-");
@@ -81,7 +81,7 @@ class ToleranzView extends WatchUi.View {
       if (maximumTemperatureLabel != null) {
         if (maximumTemperature != null) {
           maximumTemperatureLabel.setText(
-            maximumTemperature.format("%.1f") + "°"
+            Math.ceil(maximumTemperature).toString()
           );
         } else {
           maximumTemperatureLabel.setText("-");
