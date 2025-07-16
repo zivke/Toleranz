@@ -67,7 +67,7 @@ class ToleranzView extends WatchUi.View {
       if (minimumTemperatureLabel != null) {
         if (minimumTemperature != null) {
           minimumTemperatureLabel.setText(
-            Math.floor(minimumTemperature).toString()
+            minimumTemperature.format("%.1f") + "°"
           );
         } else {
           minimumTemperatureLabel.setText("-");
@@ -81,7 +81,7 @@ class ToleranzView extends WatchUi.View {
       if (maximumTemperatureLabel != null) {
         if (maximumTemperature != null) {
           maximumTemperatureLabel.setText(
-            Math.ceil(maximumTemperature).toString()
+            maximumTemperature.format("%.1f") + "°"
           );
         } else {
           maximumTemperatureLabel.setText("-");
@@ -150,15 +150,15 @@ class ToleranzView extends WatchUi.View {
     if (_state.getSelector().getType() == Selector.HEART_RATE) {
       // Set the chart minimum and maximum heart rate label values
       var minimumHeartRate = _state.getMinimumHeartRate();
-      var minTemperatureLabel = View.findDrawableById("minChartValue") as Text?;
-      if (minTemperatureLabel != null && minimumHeartRate != null) {
-        minTemperatureLabel.setText(minimumHeartRate.format("%d"));
+      var minChartValueLabel = View.findDrawableById("minChartValue") as Text?;
+      if (minChartValueLabel != null && minimumHeartRate != null) {
+        minChartValueLabel.setText(minimumHeartRate.format("%d"));
       }
 
       var maximumHeartRate = _state.getMaximumHeartRate();
-      var maxTemperatureLabel = View.findDrawableById("maxChartValue") as Text?;
-      if (maxTemperatureLabel != null && maximumHeartRate != null) {
-        maxTemperatureLabel.setText(maximumHeartRate.format("%d"));
+      var maxChartValueLabel = View.findDrawableById("maxChartValue") as Text?;
+      if (maxChartValueLabel != null && maximumHeartRate != null) {
+        maxChartValueLabel.setText(maximumHeartRate.format("%d"));
       }
 
       var heartRateIterator = Toybox.SensorHistory.getHeartRateHistory({
@@ -176,28 +176,26 @@ class ToleranzView extends WatchUi.View {
     if (_state.getSelector().getType() == Selector.TEMPERATURE) {
       // Set the chart minimum and maximum temperature label values
       var minimumTemperature = _state.getMinimumTemperature();
-      var minimumTemperatureLabel =
-        View.findDrawableById("minChartValue") as Text?;
-      if (minimumTemperatureLabel != null) {
+      var minChartValueLabel = View.findDrawableById("minChartValue") as Text?;
+      if (minChartValueLabel != null) {
         if (minimumTemperature != null) {
-          minimumTemperatureLabel.setText(
-            minimumTemperature.format("%.1f") + "°"
+          minChartValueLabel.setText(
+            Math.floor(minimumTemperature).format("%d")
           );
         } else {
-          minimumTemperatureLabel.setText("-");
+          minChartValueLabel.setText("-");
         }
       }
 
       var maximumTemperature = _state.getMaximumTemperature();
-      var maximumTemperatureLabel =
-        View.findDrawableById("maxChartValue") as Text?;
-      if (maximumTemperatureLabel != null) {
+      var maxChartValueLabel = View.findDrawableById("maxChartValue") as Text?;
+      if (maxChartValueLabel != null) {
         if (maximumTemperature != null) {
-          maximumTemperatureLabel.setText(
-            maximumTemperature.format("%.1f") + "°"
+          maxChartValueLabel.setText(
+            Math.ceil(maximumTemperature).format("%d")
           );
         } else {
-          maximumTemperatureLabel.setText("-");
+          maxChartValueLabel.setText("-");
         }
       }
 
