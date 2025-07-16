@@ -110,7 +110,7 @@ class ChartDrawable extends WatchUi.Drawable {
       i++;
     }
 
-    valueHistory = valueHistory.slice(0, i - 1); // Remove unused elements
+    valueHistory = valueHistory.slice(0, i); // Remove unused elements
 
     var rectangleWidth = Math.ceil(
       _chartWidth / valueHistory.size()
