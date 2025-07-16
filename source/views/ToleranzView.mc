@@ -1,4 +1,5 @@
 import Toybox.Graphics;
+import Toybox.SensorHistory;
 import Toybox.WatchUi;
 
 class ToleranzView extends WatchUi.View {
@@ -27,6 +28,32 @@ class ToleranzView extends WatchUi.View {
     drawCurrentTime(dc);
     drawTemperatureValues(dc);
     drawHeartRateValues(dc);
+
+    if (_state.getSelector().getType() == Selector.TEMPERATURE) {
+      var temperatureIterator = Toybox.SensorHistory.getTemperatureHistory({
+        :period => 120,
+        :order => SensorHistory.ORDER_NEWEST_FIRST,
+      });
+
+      var temperatureChartDrawable =
+        View.findDrawableById("Chart") as ChartDrawable?;
+      if (temperatureChartDrawable != null) {
+        temperatureChartDrawable.setSensorHistoryIterator(temperatureIterator);
+      }
+    }
+
+    if (_state.getSelector().getType() == Selector.HEART_RATE) {
+      var heartRateIterator = Toybox.SensorHistory.getHeartRateHistory({
+        :period => 120,
+        :order => SensorHistory.ORDER_NEWEST_FIRST,
+      });
+
+      var heartRateChartDrawable =
+        View.findDrawableById("Chart") as ChartDrawable?;
+      if (heartRateChartDrawable != null) {
+        heartRateChartDrawable.setSensorHistoryIterator(heartRateIterator);
+      }
+    }
 
     // Call the parent onUpdate function to redraw the layout
     View.onUpdate(dc);
