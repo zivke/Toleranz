@@ -163,7 +163,7 @@ class ToleranzView extends WatchUi.View {
 
       var heartRateIterator = Toybox.SensorHistory.getHeartRateHistory({
         :period => _state.getElapsedTime(),
-        :order => SensorHistory.ORDER_NEWEST_FIRST,
+        :order => SensorHistory.ORDER_OLDEST_FIRST,
       });
 
       var heartRateChartDrawable =
@@ -203,7 +203,7 @@ class ToleranzView extends WatchUi.View {
 
       var temperatureIterator = Toybox.SensorHistory.getTemperatureHistory({
         :period => _state.getElapsedTime(),
-        :order => SensorHistory.ORDER_NEWEST_FIRST,
+        :order => SensorHistory.ORDER_OLDEST_FIRST,
       });
 
       var temperatureChartDrawable =
