@@ -211,7 +211,7 @@ class ToleranzView extends WatchUi.View {
         }
 
         var period = _state.getElapsedTime();
-        if (period.lessThan(new Time.Duration(120))) {
+        if (period.value() < 120) {
           // If the elapsed time is less than 2 minutes, use the last measured temperature
           period = 1;
         }
