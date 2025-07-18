@@ -39,7 +39,7 @@
 				justification="Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER" />
 			<bitmap id="HeartSmallBlackIcon" x="13" y="100"
 				filename="..\..\resources\drawables\custom_heart_21px_blk_no_bkgnd.png" />
-			<bitmap id="ThermometerSmallBlackIcon" x="17" y="100"
+			<bitmap id="ThermometerSmallBlackIcon" x="18" y="100"
 				filename="..\..\resources\drawables\custom_thermo_11x21px_blk_no_bkgnd.png" />
 			<label id="minChartValue" text="-" x="32" y="128"
 				color="Graphics.COLOR_BLACK"
