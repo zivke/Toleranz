@@ -1,4 +1,5 @@
 import Toybox.Graphics;
+import Toybox.SensorHistory;
 import Toybox.WatchUi;
 
 class ToleranzView extends WatchUi.View {
@@ -27,6 +28,7 @@ class ToleranzView extends WatchUi.View {
     drawCurrentTime(dc);
     drawTemperatureValues(dc);
     drawHeartRateValues(dc);
+    drawChart(dc);
 
     // Call the parent onUpdate function to redraw the layout
     View.onUpdate(dc);
@@ -141,6 +143,72 @@ class ToleranzView extends WatchUi.View {
       stopwatchLabel.setText(
         Lang.format("$1$:$2$", [minutes.format("%02d"), seconds.format("%02d")])
       );
+    }
+  }
+
+  private function drawChart(dc as Graphics.Dc) {
+    if (_state.getSelector().getType() == Selector.HEART_RATE) {
+      // Set the chart minimum and maximum heart rate label values
+      var minimumHeartRate = _state.getMinimumHeartRate();
+      var minChartValueLabel = View.findDrawableById("minChartValue") as Text?;
+      if (minChartValueLabel != null && minimumHeartRate != null) {
+        minChartValueLabel.setText(minimumHeartRate.format("%d"));
+      }
+
+      var maximumHeartRate = _state.getMaximumHeartRate();
+      var maxChartValueLabel = View.findDrawableById("maxChartValue") as Text?;
+      if (maxChartValueLabel != null && maximumHeartRate != null) {
+        maxChartValueLabel.setText(maximumHeartRate.format("%d"));
+      }
+
+      var heartRateIterator = Toybox.SensorHistory.getHeartRateHistory({
+        :period => _state.getElapsedTime(),
+        :order => SensorHistory.ORDER_OLDEST_FIRST,
+      });
+
+      var heartRateChartDrawable =
+        View.findDrawableById("Chart") as ChartDrawable?;
+      if (heartRateChartDrawable != null) {
+        heartRateChartDrawable.setSensorHistoryIterator(heartRateIterator);
+      }
+    }
+
+    if (_state.getSelector().getType() == Selector.TEMPERATURE) {
+      // Set the chart minimum and maximum temperature label values
+      var minimumTemperature = _state.getMinimumTemperature();
+      var minChartValueLabel = View.findDrawableById("minChartValue") as Text?;
+      if (minChartValueLabel != null) {
+        if (minimumTemperature != null) {
+          minChartValueLabel.setText(
+            Math.floor(minimumTemperature).format("%d")
+          );
+        } else {
+          minChartValueLabel.setText("-");
+        }
+      }
+
+      var maximumTemperature = _state.getMaximumTemperature();
+      var maxChartValueLabel = View.findDrawableById("maxChartValue") as Text?;
+      if (maxChartValueLabel != null) {
+        if (maximumTemperature != null) {
+          maxChartValueLabel.setText(
+            Math.ceil(maximumTemperature).format("%d")
+          );
+        } else {
+          maxChartValueLabel.setText("-");
+        }
+      }
+
+      var temperatureIterator = Toybox.SensorHistory.getTemperatureHistory({
+        :period => _state.getElapsedTime(),
+        :order => SensorHistory.ORDER_OLDEST_FIRST,
+      });
+
+      var temperatureChartDrawable =
+        View.findDrawableById("Chart") as ChartDrawable?;
+      if (temperatureChartDrawable != null) {
+        temperatureChartDrawable.setSensorHistoryIterator(temperatureIterator);
+      }
     }
   }
 }
