@@ -5,7 +5,7 @@ import Toybox.System;
 import Toybox.Time;
 import Toybox.WatchUi;
 
-class ChartDrawable extends WatchUi.Drawable {
+class SensorHistoryChartDrawable extends WatchUi.Drawable {
   private var _sensorHistoryIterator as SensorHistoryIterator?;
 
   private var _foregroundColor as Number;
@@ -161,7 +161,9 @@ class ChartDrawable extends WatchUi.Drawable {
         var yMinTriangle = _chartY + _chartHeight - 7;
         drawMinTriangle(
           dc,
-          Math.round(_chartX + rectangleWidth * (minValueIndex + 0.5)).toNumber(),
+          Math.round(
+            _chartX + rectangleWidth * (minValueIndex + 0.5)
+          ).toNumber(),
           yMinTriangle
         );
       }
@@ -171,7 +173,9 @@ class ChartDrawable extends WatchUi.Drawable {
         var yMaxTriangle = _chartY + 6;
         drawMaxTriangle(
           dc,
-          Math.round(_chartX + rectangleWidth * (maxValueIndex + 0.5)).toNumber(),
+          Math.round(
+            _chartX + rectangleWidth * (maxValueIndex + 0.5)
+          ).toNumber(),
           yMaxTriangle
         );
       }

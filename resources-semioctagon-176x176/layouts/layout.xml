@@ -46,7 +46,7 @@
 				font="Graphics.FONT_XTINY"
 				justification="Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER" />
 
-			<drawable id="Chart" class="ChartDrawable">
+			<drawable id="Chart" class="SensorHistoryChartDrawable">
 				<param name="locX">40</param>
 				<param name="locY">80</param>
 				<param name="width">120</param>

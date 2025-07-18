@@ -176,7 +176,7 @@ class ToleranzView extends WatchUi.View {
         });
 
         var heartRateChartDrawable =
-          View.findDrawableById("Chart") as ChartDrawable?;
+          View.findDrawableById("Chart") as SensorHistoryChartDrawable?;
         if (heartRateChartDrawable != null) {
           heartRateChartDrawable.setSensorHistoryIterator(heartRateIterator);
         }
@@ -221,7 +221,7 @@ class ToleranzView extends WatchUi.View {
         });
 
         var temperatureChartDrawable =
-          View.findDrawableById("Chart") as ChartDrawable?;
+          View.findDrawableById("Chart") as SensorHistoryChartDrawable?;
         if (temperatureChartDrawable != null) {
           temperatureChartDrawable.setSensorHistoryIterator(
             temperatureIterator
