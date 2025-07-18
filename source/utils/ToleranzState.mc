@@ -1,5 +1,6 @@
 import Toybox.Activity;
 import Toybox.ActivityMonitor;
+import Toybox.Attention;
 import Toybox.Lang;
 import Toybox.System;
 import Toybox.Time;
@@ -223,6 +224,14 @@ class ToleranzState {
 
       if (_elapsedTime.value() % 60 == 0) {
         processTemperature(_elapsedTime);
+
+        // Vibrate every minute
+        if (Attention has :vibrate) {
+          Attention.vibrate([
+            // 100% strength, 500ms duration
+            new Attention.VibeProfile(100, 500),
+          ]);
+        }
       }
     }
 
