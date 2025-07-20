@@ -148,6 +148,17 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
       // Draw the rectangle
       dc.setColor(_foregroundColor, _backgroundColor);
       dc.fillRectangle(x, y, rectangleWidth, _chartHeight - (y - _chartY));
+
+      // Draw the rectangle edge markers
+      if (rectangleWidth > 1) {
+        dc.setColor(_backgroundColor, Graphics.COLOR_TRANSPARENT);
+        dc.drawLine(
+          x + rectangleWidth - 1,
+          _chartY + _chartHeight,
+          x + rectangleWidth - 1,
+          _chartY + _chartHeight - 2
+        );
+      }
     }
 
     if (_maxValue != _minValue) {
