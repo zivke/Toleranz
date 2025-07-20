@@ -129,7 +129,7 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
     var rectangleWidth = Math.floor(_chartWidth / _data.size()).toNumber();
 
     // Move all rectangles to the right edge of the chart
-    var xOffset = _chartWidth - (rectangleWidth * _data.size());
+    var xOffset = _chartWidth - rectangleWidth * _data.size();
 
     // Draw chart
     for (var i = 0; i < _data.size(); i++) {
