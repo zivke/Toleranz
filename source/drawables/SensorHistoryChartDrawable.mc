@@ -156,7 +156,7 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
           x + rectangleWidth - 1,
           _chartY + _chartHeight,
           x + rectangleWidth - 1,
-          _chartY + _chartHeight - 2
+          _chartY + _chartHeight - 3
         );
       }
     }
