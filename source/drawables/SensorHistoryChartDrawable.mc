@@ -102,7 +102,9 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
       i++;
     }
 
-    if (i > 0) {
+    if (i == 0) {
+      _data = [];
+    } else {
       _data = _data.slice(0, i); // Remove unused elements
     }
 
