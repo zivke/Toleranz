@@ -20,19 +20,6 @@ class ToleranzDelegate extends WatchUi.BehaviorDelegate {
     return true;
   }
 
-  function onBack() as Boolean {
-    if (_state.isRunning()) {
-      return true; // Ignore the back action
-    } else {
-      if (_state.getElapsedTime().greaterThan(new Time.Duration(0))) {
-        _state.reset();
-        return true;
-      } else {
-        return false; // Exit the app
-      }
-    }
-  }
-
   function onNextPage() as Boolean {
     _state.getSelector().up();
 
