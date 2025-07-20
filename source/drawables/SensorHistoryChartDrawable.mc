@@ -110,10 +110,8 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
   }
 
   function draw(dc as Dc) {
-    // Set colors
-    dc.setColor(_foregroundColor, _backgroundColor);
-
     // Draw chart frame
+    dc.setColor(_foregroundColor, _backgroundColor);
     dc.drawRectangle(_chartX, _chartY, _chartWidth, _chartHeight);
 
     if (
@@ -148,6 +146,7 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
       ).toNumber();
 
       // Draw the rectangle
+      dc.setColor(_foregroundColor, _backgroundColor);
       dc.fillRectangle(x, y, rectangleWidth, _chartHeight - (y - _chartY));
     }
 
