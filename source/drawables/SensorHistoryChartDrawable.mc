@@ -6,8 +6,6 @@ import Toybox.Time;
 import Toybox.WatchUi;
 
 class SensorHistoryChartDrawable extends WatchUi.Drawable {
-  private var _sensorHistoryIterator as SensorHistoryIterator?;
-
   private var _foregroundColor as Number;
   private var _backgroundColor as Number;
 
@@ -15,12 +13,17 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
   private var _chartHeight as Number;
   private var _chartX as Number; // X position of the left-top corner of the chart
   private var _chartY as Number; // Y position of the left-top corner of the chart
+  private var _chartMinimum as Number?;
+  private var _chartMaximum as Number?;
 
-  function setSensorHistoryIterator(
-    sensorHistoryIterator as SensorHistoryIterator
-  ) {
-    self._sensorHistoryIterator = sensorHistoryIterator;
-  }
+  private var _data as Lang.Array<Number or Float or Null> = [];
+
+  private var _minValue as Float or Number or Null;
+  private var _minValueIndex as Number?;
+  private var _maxValue as Float or Number or Null;
+  private var _maxValueIndex as Number?;
+
+  private var _yScale as Float?;
 
   function initialize(params as Dictionary) {
     Drawable.initialize(params);
@@ -41,101 +44,117 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
     self._chartY = locY as Number;
   }
 
-  function draw(dc as Dc) {
-    // Draw chart frame
-    dc.drawRectangle(_chartX, _chartY, _chartWidth, _chartHeight);
+  function loadData(sensorHistoryIterator as SensorHistoryIterator) as Boolean {
+    _data = [];
 
     // If no valid data, skip drawing the chart
-    if (_sensorHistoryIterator == null) {
-      return;
-    }
+    _minValue = sensorHistoryIterator.getMin();
+    _maxValue = sensorHistoryIterator.getMax();
 
-    var minValue = _sensorHistoryIterator.getMin();
-    var maxValue = _sensorHistoryIterator.getMax();
-    var newestSampleTime = _sensorHistoryIterator.getNewestSampleTime();
-    var oldestSampleTime = _sensorHistoryIterator.getOldestSampleTime();
+    var newestSampleTime = sensorHistoryIterator.getNewestSampleTime();
+    var oldestSampleTime = sensorHistoryIterator.getOldestSampleTime();
 
     if (
-      minValue == null ||
-      maxValue == null ||
+      _minValue == null ||
+      _maxValue == null ||
       newestSampleTime == null ||
       oldestSampleTime == null
     ) {
       // Missing data - skip drawing the chart
-      return;
+      return false;
     }
 
     var elapsedTime =
       newestSampleTime.subtract(oldestSampleTime) as Time.Duration;
     if (elapsedTime.value() <= 0) {
+      // Data not valid
+      return false;
+    }
+
+    var maxHistorySize = elapsedTime.value(); // Maximum history size in seconds
+    _data = new Lang.Array<Number or Float or Null>[maxHistorySize];
+
+    // Adjust min and max to ensure a visible range
+    _chartMinimum = Math.floor(_minValue).toNumber() - 5;
+    _chartMaximum = Math.ceil(_maxValue).toNumber() + 5;
+
+    _yScale = _chartHeight.toFloat() / (_chartMaximum - _chartMinimum);
+
+    // Prepare data
+    var sensorSample = sensorHistoryIterator.next();
+    var i = 0 as Number;
+    while (sensorSample != null) {
+      var value = sensorSample.data as Float?;
+      _data[i] = value;
+
+      if (value != null) {
+        // Save the min and max indices
+        if (value == _minValue) {
+          _minValueIndex = i;
+        }
+
+        if (value == _maxValue) {
+          _maxValueIndex = i;
+        }
+      }
+
+      sensorSample = sensorHistoryIterator.next();
+      i++;
+    }
+
+    if (i > 0) {
+      _data = _data.slice(0, i); // Remove unused elements
+    }
+
+    return true;
+  }
+
+  function draw(dc as Dc) {
+    // Set colors
+    dc.setColor(_foregroundColor, _backgroundColor);
+
+    // Draw chart frame
+    dc.drawRectangle(_chartX, _chartY, _chartWidth, _chartHeight);
+
+    if (
+      _data.size() == 0 ||
+      _minValue == null ||
+      _maxValue == null ||
+      _chartMinimum == null ||
+      _chartMaximum == null ||
+      _yScale == null
+    ) {
       // No valid data - skip drawing the chart
       return;
     }
 
-    var maxHistorySize = elapsedTime.value(); // Maximum history size in seconds
-    var valueHistory = new Lang.Array<Number or Float or Null>[maxHistorySize];
+    var rectangleWidth = Math.floor(_chartWidth / _data.size()).toNumber();
 
-    // Adjust min and max to ensure a visible range
-    var chartMinimum = Math.floor(minValue).toNumber() - 5;
-    var chartMaximum = Math.ceil(maxValue).toNumber() + 5;
-
-    // Save the min and max indices
-    var minValueIndex = null;
-    var maxValueIndex = null;
-
-    // Prepare data
-    var sensorSample = _sensorHistoryIterator.next();
-    var i = 0 as Number;
-    while (sensorSample != null) {
-      var value = sensorSample.data as Float?;
-      valueHistory[i] = value;
-
-      if (value != null) {
-        // Save the min and max indices
-        if (value == minValue) {
-          minValueIndex = i;
-        }
-
-        if (value == maxValue) {
-          maxValueIndex = i;
-        }
-      }
-
-      sensorSample = _sensorHistoryIterator.next();
-      i++;
-    }
-
-    valueHistory = valueHistory.slice(0, i); // Remove unused elements
-
-    // Set colors
-    dc.setColor(_foregroundColor, _backgroundColor);
+    // Move all rectangles to the right edge of the chart
+    var xOffset = _chartWidth - (rectangleWidth * _data.size());
 
     // Draw chart
-    var yScale = _chartHeight.toFloat() / (chartMaximum - chartMinimum);
-    var rectangleWidth = Math.ceil(
-      _chartWidth / valueHistory.size()
-    ).toNumber();
-    for (i = 0; i < valueHistory.size(); i++) {
-      var value = valueHistory[i];
+    for (var i = 0; i < _data.size(); i++) {
+      var value = _data[i];
       if (value == null) {
         continue; // Skip null values
       }
 
       // Calculate the x position based on the index
-      var x = _chartX + rectangleWidth * i;
+      var x = _chartX + xOffset + rectangleWidth * i;
       // Calculate the y position based on the value
       var y = Math.ceil(
-        _chartY + _chartHeight - (value - chartMinimum) * yScale
+        _chartY + _chartHeight - (value - _chartMinimum) * _yScale
       ).toNumber();
 
       // Draw the rectangle
       dc.fillRectangle(x, y, rectangleWidth, _chartHeight - (y - _chartY));
     }
 
-    if (maxValue != minValue) {
+    if (_maxValue != _minValue) {
       // Draw the min/max dotted lines
       var dottedLineY = Math.ceil(
-        _chartY + _chartHeight - (minValue - chartMinimum) * yScale
+        _chartY + _chartHeight - (_minValue - _chartMinimum) * _yScale
       ).toNumber();
       drawHorizontalDottedLine(
         dc,
@@ -146,7 +165,7 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
       );
 
       dottedLineY = Math.ceil(
-        _chartY + _chartHeight - (maxValue - chartMinimum) * yScale
+        _chartY + _chartHeight - (_maxValue - _chartMinimum) * _yScale
       ).toNumber();
       drawHorizontalDottedLine(
         dc,
@@ -157,24 +176,24 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
       );
 
       // Draw the triangle if the minimum was found
-      if (minValueIndex != null) {
+      if (_minValueIndex != null) {
         var yMinTriangle = _chartY + _chartHeight - 7;
         drawMinTriangle(
           dc,
-          Math.round(
-            _chartX + rectangleWidth * (minValueIndex + 0.5)
+          Math.floor(
+            _chartX + xOffset + rectangleWidth * (_minValueIndex + 0.5)
           ).toNumber(),
           yMinTriangle
         );
       }
 
       // Draw the triangle if the maximum was found
-      if (maxValueIndex != null) {
+      if (_maxValueIndex != null) {
         var yMaxTriangle = _chartY + 6;
         drawMaxTriangle(
           dc,
-          Math.round(
-            _chartX + rectangleWidth * (maxValueIndex + 0.5)
+          Math.floor(
+            _chartX + xOffset + rectangleWidth * (_maxValueIndex + 0.5)
           ).toNumber(),
           yMaxTriangle
         );
