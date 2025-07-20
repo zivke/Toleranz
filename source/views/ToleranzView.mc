@@ -55,8 +55,14 @@ class ToleranzView extends WatchUi.View {
     var currentTemperature = _state.getCurrentTemperature();
     var currentTemperatureLabel =
       View.findDrawableById("currentTemperatureValue") as Text?;
-    if (currentTemperatureLabel != null && currentTemperature != null) {
-      currentTemperatureLabel.setText(currentTemperature.format("%.1f") + "°");
+    if (currentTemperatureLabel != null) {
+      if (currentTemperature != null) {
+        currentTemperatureLabel.setText(
+          currentTemperature.format("%.1f") + "°"
+        );
+      } else {
+        currentTemperatureLabel.setText("-");
+      }
     }
 
     if (
@@ -98,8 +104,12 @@ class ToleranzView extends WatchUi.View {
     var currentHeartRate = _state.getCurrentHeartRate();
     var currentHeartRateLabel =
       View.findDrawableById("currentHeartRateValue") as Text?;
-    if (currentHeartRateLabel != null && currentHeartRate != null) {
-      currentHeartRateLabel.setText(currentHeartRate.format("%d"));
+    if (currentHeartRateLabel != null) {
+      if (currentHeartRate != null) {
+        currentHeartRateLabel.setText(currentHeartRate.format("%d"));
+      } else {
+        currentHeartRateLabel.setText("-");
+      }
     }
 
     if (
@@ -109,14 +119,22 @@ class ToleranzView extends WatchUi.View {
       // Set the minimum and maximum heart rate label values
       var minimumHeartRate = _state.getMinimumHeartRate();
       var minTemperatureLabel = View.findDrawableById("minimumValue") as Text?;
-      if (minTemperatureLabel != null && minimumHeartRate != null) {
-        minTemperatureLabel.setText(minimumHeartRate.format("%d"));
+      if (minTemperatureLabel != null) {
+        if (minimumHeartRate != null) {
+          minTemperatureLabel.setText(minimumHeartRate.format("%d"));
+        } else {
+          minTemperatureLabel.setText("-");
+        }
       }
 
       var maximumHeartRate = _state.getMaximumHeartRate();
       var maxTemperatureLabel = View.findDrawableById("maximumValue") as Text?;
-      if (maxTemperatureLabel != null && maximumHeartRate != null) {
-        maxTemperatureLabel.setText(maximumHeartRate.format("%d"));
+      if (maxTemperatureLabel != null) {
+        if (maximumHeartRate != null) {
+          maxTemperatureLabel.setText(maximumHeartRate.format("%d"));
+        } else {
+          maxTemperatureLabel.setText("-");
+        }
       }
     }
   }
@@ -159,15 +177,23 @@ class ToleranzView extends WatchUi.View {
         var minimumHeartRate = _state.getMinimumHeartRate();
         var minChartValueLabel =
           View.findDrawableById("minChartValue") as Text?;
-        if (minChartValueLabel != null && minimumHeartRate != null) {
-          minChartValueLabel.setText(minimumHeartRate.format("%d"));
+        if (minChartValueLabel != null) {
+          if (minimumHeartRate != null) {
+            minChartValueLabel.setText(minimumHeartRate.format("%d"));
+          } else {
+            minChartValueLabel.setText("-");
+          }
         }
 
         var maximumHeartRate = _state.getMaximumHeartRate();
         var maxChartValueLabel =
           View.findDrawableById("maxChartValue") as Text?;
-        if (maxChartValueLabel != null && maximumHeartRate != null) {
-          maxChartValueLabel.setText(maximumHeartRate.format("%d"));
+        if (maxChartValueLabel != null) {
+          if (maximumHeartRate != null) {
+            maxChartValueLabel.setText(maximumHeartRate.format("%d"));
+          } else {
+            maxChartValueLabel.setText("-");
+          }
         }
 
         var heartRateIterator = Toybox.SensorHistory.getHeartRateHistory({
