@@ -236,13 +236,8 @@ class ToleranzView extends WatchUi.View {
           }
         }
 
-        var period = _state.getElapsedTime();
-        if (period.value() < 120) {
-          // If the elapsed time is less than 2 minutes, use the last measured temperature
-          period = 1;
-        }
         var temperatureIterator = Toybox.SensorHistory.getTemperatureHistory({
-          :period => period,
+          :period => _state.getElapsedTime(),
           :order => SensorHistory.ORDER_OLDEST_FIRST,
         });
 
