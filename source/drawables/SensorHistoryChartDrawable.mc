@@ -83,12 +83,7 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
     var minValueIndex = null;
     var maxValueIndex = null;
 
-    // Set colors
-    dc.setColor(_foregroundColor, _backgroundColor);
-
-    // Draw chart
-    var yScale = _chartHeight.toFloat() / (chartMaximum - chartMinimum);
-
+    // Prepare data
     var sensorSample = _sensorHistoryIterator.next();
     var i = 0 as Number;
     while (sensorSample != null) {
@@ -112,6 +107,11 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
 
     valueHistory = valueHistory.slice(0, i); // Remove unused elements
 
+    // Set colors
+    dc.setColor(_foregroundColor, _backgroundColor);
+
+    // Draw chart
+    var yScale = _chartHeight.toFloat() / (chartMaximum - chartMinimum);
     var rectangleWidth = Math.ceil(
       _chartWidth / valueHistory.size()
     ).toNumber();
