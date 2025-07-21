@@ -163,7 +163,7 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
       }
     }
 
-    if (_maxValue != _minValue) {
+    if (Math.round(_maxValue).toNumber() != Math.round(_minValue).toNumber()) {
       // Draw the min/max dotted lines
       var dottedLineY = Math.ceil(
         _chartY + _chartHeight - (_minValue - _chartMinimum) * _yScale
