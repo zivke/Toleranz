@@ -45,21 +45,19 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
   }
 
   function loadData(sensorHistoryIterator as SensorHistoryIterator) as Boolean {
+    _chartMinimum = null;
+    _chartMaximum = null;
     _data = [];
-
-    // If no valid data, skip drawing the chart
-    _minValue = sensorHistoryIterator.getMin();
-    _maxValue = sensorHistoryIterator.getMax();
+    _minValue = null;
+    _minValueIndex = null;
+    _maxValue = null;
+    _maxValueIndex = null;
+    _yScale = null;
 
     var newestSampleTime = sensorHistoryIterator.getNewestSampleTime();
     var oldestSampleTime = sensorHistoryIterator.getOldestSampleTime();
 
-    if (
-      _minValue == null ||
-      _maxValue == null ||
-      newestSampleTime == null ||
-      oldestSampleTime == null
-    ) {
+    if (newestSampleTime == null || oldestSampleTime == null) {
       // Missing data - skip drawing the chart
       return false;
     }
@@ -74,12 +72,6 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
     var maxHistorySize = elapsedTime.value(); // Maximum history size in seconds
     _data = new Lang.Array<Number or Float or Null>[maxHistorySize];
 
-    // Adjust min and max to ensure a visible range
-    _chartMinimum = Math.floor(_minValue).toNumber() - 7;
-    _chartMaximum = Math.ceil(_maxValue).toNumber() + 7;
-
-    _yScale = _chartHeight.toFloat() / (_chartMaximum - _chartMinimum);
-
     // Prepare data
     var sensorSample = sensorHistoryIterator.next();
     var i = 0 as Number;
@@ -89,11 +81,13 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
 
       if (value != null) {
         // Save the min and max indices
-        if (value == _minValue) {
+        if (_minValue == null || value < _minValue) {
+          _minValue = value;
           _minValueIndex = i;
         }
 
-        if (value == _maxValue) {
+        if (_maxValue == null || value > _maxValue) {
+          _maxValue = value;
           _maxValueIndex = i;
         }
       }
@@ -104,9 +98,23 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
 
     if (i == 0) {
       _data = [];
-    } else {
-      _data = _data.slice(0, i); // Remove unused elements
+
+      // No valid data - skip drawing the chart
+      return false;
     }
+
+    _data = _data.slice(0, i); // Remove unused elements
+
+    if (_minValue == null || _maxValue == null) {
+      // No valid data - skip drawing the chart
+      return false;
+    }
+
+    // Adjust min and max to ensure a visible range
+    _chartMinimum = Math.floor(_minValue).toNumber() - 7;
+    _chartMaximum = Math.ceil(_maxValue).toNumber() + 7;
+
+    _yScale = _chartHeight.toFloat() / (_chartMaximum - _chartMinimum);
 
     return true;
   }
