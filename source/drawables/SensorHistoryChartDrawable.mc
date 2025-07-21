@@ -75,8 +75,8 @@ class SensorHistoryChartDrawable extends WatchUi.Drawable {
     _data = new Lang.Array<Number or Float or Null>[maxHistorySize];
 
     // Adjust min and max to ensure a visible range
-    _chartMinimum = Math.floor(_minValue).toNumber() - 5;
-    _chartMaximum = Math.ceil(_maxValue).toNumber() + 5;
+    _chartMinimum = Math.floor(_minValue).toNumber() - 7;
+    _chartMaximum = Math.ceil(_maxValue).toNumber() + 7;
 
     _yScale = _chartHeight.toFloat() / (_chartMaximum - _chartMinimum);
 
