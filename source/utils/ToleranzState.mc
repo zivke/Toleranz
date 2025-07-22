@@ -118,20 +118,16 @@ class ToleranzState {
 
   private var _timer as Timer.Timer;
 
-  private var _currentHeartRate as Number?;
-  private var _maximumHeartRate as Number?;
-  private var _minimumHeartRate as Number?;
-
-  private var _currentTemperature as Float?;
-  private var _maximumTemperature as Float?;
-  private var _minimumTemperature as Float?;
+  private var _heartRateData as ToleranzData?;
+  private var _temperatureData as ToleranzData?;
 
   function initialize() {
     self._systemUnits = System.getDeviceSettings().temperatureUnits;
     self._status = new Status();
     self._selector = new Selector();
-    self._timer = new Timer.Timer();
     self._elapsedTime = new Time.Duration(0);
+    self._timer = new Timer.Timer();
+    self._heartRateData = new ToleranzData(null);
 
     // Check device for SensorHistory compatibility
     if (!(Toybox has :SensorHistory)) {
@@ -157,32 +153,6 @@ class ToleranzState {
   public function reset() as Void {
     _startTime = null;
     _elapsedTime = new Time.Duration(0);
-
-    _currentHeartRate = Activity.getActivityInfo().currentHeartRate;
-
-    processTemperature(1);
-  }
-
-  private function processTemperature(period as Number or Time.Duration) {
-    var temperatureIterator = Toybox.SensorHistory.getTemperatureHistory({
-      :period => period,
-      :order => SensorHistory.ORDER_NEWEST_FIRST,
-    });
-    var temperatureSensorSample = temperatureIterator.next();
-    if (temperatureSensorSample != null) {
-      _currentTemperature = convertTemperature(
-        temperatureSensorSample.data as Float?
-      );
-    }
-
-    if (isRunning()) {
-      _maximumTemperature = convertTemperature(
-        temperatureIterator.getMax() as Float?
-      );
-      _minimumTemperature = convertTemperature(
-        temperatureIterator.getMin() as Float?
-      );
-    }
   }
 
   private function convertTemperature(temperature as Float?) as Float? {
@@ -198,33 +168,21 @@ class ToleranzState {
   }
 
   function refresh() as Void {
-    _currentHeartRate = Activity.getActivityInfo().currentHeartRate;
-
     if (isRunning()) {
       var now = new Time.Moment(Time.now().value());
 
       // NOTE: The _startTime cannot be null if the activity is already running
       _elapsedTime = now.subtract(_startTime) as Time.Duration;
 
-      if (_currentHeartRate != null) {
-        if (
-          _minimumHeartRate == null ||
-          _currentHeartRate < _minimumHeartRate
-        ) {
-          _minimumHeartRate = _currentHeartRate;
-        }
+      _heartRateData.addValue(Activity.getActivityInfo().currentHeartRate);
 
-        if (
-          _maximumHeartRate == null ||
-          _currentHeartRate > _maximumHeartRate
-        ) {
-          _maximumHeartRate = _currentHeartRate;
-        }
-      }
+      var temperatureIterator = Toybox.SensorHistory.getTemperatureHistory({
+        :period => _elapsedTime,
+        :order => SensorHistory.ORDER_OLDEST_FIRST,
+      });
+      _temperatureData = new ToleranzData(temperatureIterator);
 
       if (_elapsedTime.value() % 60 == 0) {
-        processTemperature(_elapsedTime);
-
         // Vibrate every minute
         if (Attention has :vibrate) {
           Attention.vibrate([
@@ -269,30 +227,62 @@ class ToleranzState {
   }
 
   public function getCurrentHeartRate() as Number? {
-    return _currentHeartRate;
+    if (_heartRateData == null) {
+      return null;
+    }
+
+    return _heartRateData.getLastValue();
   }
 
   public function getMinimumHeartRate() as Number? {
-    return _minimumHeartRate;
+    if (_heartRateData == null) {
+      return null;
+    }
+
+    return _heartRateData.getMinValue();
   }
 
   public function getMaximumHeartRate() as Number? {
-    return _maximumHeartRate;
+    if (_heartRateData == null) {
+      return null;
+    }
+
+    return _heartRateData.getMaxValue();
   }
 
   public function getCurrentTemperature() as Float? {
-    return _currentTemperature;
+    if (_temperatureData == null) {
+      return null;
+    }
+
+    return _temperatureData.getLastValue();
   }
 
   public function getMinimumTemperature() as Float? {
-    return _minimumTemperature;
+    if (_temperatureData == null) {
+      return null;
+    }
+
+    return _temperatureData.getMinValue();
   }
 
   public function getMaximumTemperature() as Float? {
-    return _maximumTemperature;
+    if (_temperatureData == null) {
+      return null;
+    }
+
+    return _temperatureData.getMaxValue();
   }
 
   public function getSelector() as Selector {
     return _selector;
+  }
+
+  public function getHeartRateData() as ToleranzData? {
+    return _heartRateData;
+  }
+
+  public function getTemperatureData() as ToleranzData? {
+    return _temperatureData;
   }
 }

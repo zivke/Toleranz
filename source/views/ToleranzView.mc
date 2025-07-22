@@ -52,7 +52,17 @@ class ToleranzView extends WatchUi.View {
   // Draw the temperature values
   private function drawTemperatureValues(dc as Graphics.Dc) {
     // Set the temperature label value
-    var currentTemperature = _state.getCurrentTemperature();
+    var temperatureIterator = Toybox.SensorHistory.getTemperatureHistory({
+      :period => 1,
+      :order => SensorHistory.ORDER_NEWEST_FIRST,
+    });
+    var currentTemperature = null;
+    var sensorSample = temperatureIterator.next();
+    if (sensorSample == null) {
+      currentTemperature = null;
+    } else {
+      currentTemperature = sensorSample.data;
+    }
     var currentTemperatureLabel =
       View.findDrawableById("currentTemperatureValue") as Text?;
     if (currentTemperatureLabel != null) {
@@ -65,10 +75,7 @@ class ToleranzView extends WatchUi.View {
       }
     }
 
-    if (
-      _state.isRunning() &&
-      _state.getSelector().getType() == Selector.TEMPERATURE
-    ) {
+    if (_state.getSelector().getType() == Selector.TEMPERATURE) {
       // Set the minimum temperature label value
       var minimumTemperature = _state.getMinimumTemperature();
       var minimumTemperatureLabel =
@@ -101,7 +108,7 @@ class ToleranzView extends WatchUi.View {
 
   private function drawHeartRateValues(dc as Graphics.Dc) {
     // Set the temperature label value
-    var currentHeartRate = _state.getCurrentHeartRate();
+    var currentHeartRate = Activity.getActivityInfo().currentHeartRate;
     var currentHeartRateLabel =
       View.findDrawableById("currentHeartRateValue") as Text?;
     if (currentHeartRateLabel != null) {
@@ -112,10 +119,7 @@ class ToleranzView extends WatchUi.View {
       }
     }
 
-    if (
-      _state.isRunning() &&
-      _state.getSelector().getType() == Selector.HEART_RATE
-    ) {
+    if (_state.getSelector().getType() == Selector.HEART_RATE) {
       // Set the minimum and maximum heart rate label values
       var minimumHeartRate = _state.getMinimumHeartRate();
       var minTemperatureLabel = View.findDrawableById("minimumValue") as Text?;
@@ -171,82 +175,70 @@ class ToleranzView extends WatchUi.View {
   }
 
   private function drawChart(dc as Graphics.Dc) {
-    if (_state.isRunning()) {
-      if (_state.getSelector().getType() == Selector.HEART_RATE) {
-        // Set the chart minimum and maximum heart rate label values
-        var minimumHeartRate = _state.getMinimumHeartRate();
-        var minChartValueLabel =
-          View.findDrawableById("minChartValue") as Text?;
-        if (minChartValueLabel != null) {
-          if (minimumHeartRate != null) {
-            minChartValueLabel.setText(minimumHeartRate.format("%d"));
-          } else {
-            minChartValueLabel.setText("-");
-          }
-        }
-
-        var maximumHeartRate = _state.getMaximumHeartRate();
-        var maxChartValueLabel =
-          View.findDrawableById("maxChartValue") as Text?;
-        if (maxChartValueLabel != null) {
-          if (maximumHeartRate != null) {
-            maxChartValueLabel.setText(maximumHeartRate.format("%d"));
-          } else {
-            maxChartValueLabel.setText("-");
-          }
-        }
-
-        var heartRateIterator = Toybox.SensorHistory.getHeartRateHistory({
-          :period => _state.getElapsedTime(),
-          :order => SensorHistory.ORDER_OLDEST_FIRST,
-        });
-
-        var heartRateChartDrawable =
-          View.findDrawableById("Chart") as SensorHistoryChartDrawable?;
-        if (heartRateChartDrawable != null) {
-          heartRateChartDrawable.loadData(heartRateIterator);
+    if (_state.getSelector().getType() == Selector.HEART_RATE) {
+      var heartRateChartDrawable =
+        View.findDrawableById("Chart") as ChartDrawable?;
+      if (heartRateChartDrawable != null) {
+        var heartRateData = _state.getHeartRateData();
+        if (heartRateData != null) {
+          heartRateChartDrawable.loadData(heartRateData);
         }
       }
 
-      if (_state.getSelector().getType() == Selector.TEMPERATURE) {
-        // Set the chart minimum and maximum temperature label values
-        var minimumTemperature = _state.getMinimumTemperature();
-        var minChartValueLabel =
-          View.findDrawableById("minChartValue") as Text?;
-        if (minChartValueLabel != null) {
-          if (minimumTemperature != null) {
-            minChartValueLabel.setText(
-              Math.floor(minimumTemperature).format("%d")
-            );
-          } else {
-            minChartValueLabel.setText("-");
-          }
+      // Set the chart minimum and maximum heart rate label values
+      var minimumHeartRate = _state.getMinimumHeartRate();
+      var minChartValueLabel = View.findDrawableById("minChartValue") as Text?;
+      if (minChartValueLabel != null) {
+        if (minimumHeartRate != null) {
+          minChartValueLabel.setText(minimumHeartRate.format("%d"));
+        } else {
+          minChartValueLabel.setText("-");
         }
+      }
 
-        var maximumTemperature = _state.getMaximumTemperature();
-        var maxChartValueLabel =
-          View.findDrawableById("maxChartValue") as Text?;
-        if (maxChartValueLabel != null) {
-          if (maximumTemperature != null) {
-            maxChartValueLabel.setText(
-              Math.ceil(maximumTemperature).format("%d")
-            );
-          } else {
-            maxChartValueLabel.setText("-");
-          }
+      var maximumHeartRate = _state.getMaximumHeartRate();
+      var maxChartValueLabel = View.findDrawableById("maxChartValue") as Text?;
+      if (maxChartValueLabel != null) {
+        if (maximumHeartRate != null) {
+          maxChartValueLabel.setText(maximumHeartRate.format("%d"));
+        } else {
+          maxChartValueLabel.setText("-");
         }
+      }
+    }
 
-        var temperatureIterator = Toybox.SensorHistory.getTemperatureHistory({
-          :period => _state.getElapsedTime(),
-          :order => SensorHistory.ORDER_OLDEST_FIRST,
-        });
+    if (_state.getSelector().getType() == Selector.TEMPERATURE) {
+      var temperatureChartDrawable =
+        View.findDrawableById("Chart") as ChartDrawable?;
+      if (temperatureChartDrawable != null) {
+        var temperatureData = _state.getTemperatureData();
+        if (temperatureData != null) {
+          temperatureChartDrawable.loadData(temperatureData);
+        }
+      }
 
-        var temperatureChartDrawable =
-          View.findDrawableById("Chart") as SensorHistoryChartDrawable?;
-        if (temperatureChartDrawable != null) {
-          temperatureChartDrawable.loadData(
-            temperatureIterator
+      // Set the chart minimum and maximum temperature label values
+      var minimumTemperature = _state.getMinimumTemperature();
+      var minChartValueLabel = View.findDrawableById("minChartValue") as Text?;
+      if (minChartValueLabel != null) {
+        if (minimumTemperature != null) {
+          minChartValueLabel.setText(
+            Math.floor(minimumTemperature).format("%d")
           );
+        } else {
+          minChartValueLabel.setText("-");
+        }
+      }
+
+      var maximumTemperature = _state.getMaximumTemperature();
+      var maxChartValueLabel = View.findDrawableById("maxChartValue") as Text?;
+      if (maxChartValueLabel != null) {
+        if (maximumTemperature != null) {
+          maxChartValueLabel.setText(
+            Math.ceil(maximumTemperature).format("%d")
+          );
+        } else {
+          maxChartValueLabel.setText("-");
         }
       }
     }
