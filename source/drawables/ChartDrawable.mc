@@ -75,14 +75,14 @@ class ChartDrawable extends WatchUi.Drawable {
       return;
     }
 
-    var rectangleWidth = Math.floor(
+    var chartBarWidth = Math.floor(
       _chartWidth / _data.getDataSize()
     ).toNumber();
 
-    // Move all rectangles to the right edge of the chart
-    var xOffset = _chartWidth - rectangleWidth * _data.getDataSize();
+    // Move all chart bars to the right edge of the chart
+    var xOffset = _chartWidth - chartBarWidth * _data.getDataSize();
 
-    // Draw chart
+    // Draw chart bars
     for (var i = 0; i < _data.getDataSize(); i++) {
       var value = _data.getData()[i];
       if (value == null) {
@@ -90,23 +90,23 @@ class ChartDrawable extends WatchUi.Drawable {
       }
 
       // Calculate the x position based on the index
-      var x = _chartX + xOffset + rectangleWidth * i;
+      var x = _chartX + xOffset + chartBarWidth * i;
       // Calculate the y position based on the value
       var y = Math.ceil(
         _chartY + _chartHeight - (value - _chartMinimum) * _yScale
       ).toNumber();
 
-      // Draw the rectangle
+      // Draw the current chart bar
       dc.setColor(_foregroundColor, _backgroundColor);
-      dc.fillRectangle(x, y, rectangleWidth, _chartHeight - (y - _chartY));
+      dc.fillRectangle(x, y, chartBarWidth, _chartHeight - (y - _chartY));
 
-      // Draw the rectangle edge markers
-      if (rectangleWidth > 1) {
+      // Draw the chart bar edge markers
+      if (chartBarWidth > 1) {
         dc.setColor(_backgroundColor, Graphics.COLOR_TRANSPARENT);
         dc.drawLine(
-          x + rectangleWidth - 1,
+          x + chartBarWidth - 1,
           _chartY + _chartHeight,
-          x + rectangleWidth - 1,
+          x + chartBarWidth - 1,
           _chartY + _chartHeight - 3
         );
       }
@@ -144,7 +144,7 @@ class ChartDrawable extends WatchUi.Drawable {
       drawMinTriangle(
         dc,
         Math.floor(
-          _chartX + xOffset + rectangleWidth * (_data.getMinValueIndex() + 0.5)
+          _chartX + xOffset + chartBarWidth * (_data.getMinValueIndex() + 0.5)
         ).toNumber(),
         yMinTriangle
       );
@@ -154,7 +154,7 @@ class ChartDrawable extends WatchUi.Drawable {
       drawMaxTriangle(
         dc,
         Math.floor(
-          _chartX + xOffset + rectangleWidth * (_data.getMaxValueIndex() + 0.5)
+          _chartX + xOffset + chartBarWidth * (_data.getMaxValueIndex() + 0.5)
         ).toNumber(),
         yMaxTriangle
       );
