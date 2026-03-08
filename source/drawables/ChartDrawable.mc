@@ -75,22 +75,36 @@ class ChartDrawable extends WatchUi.Drawable {
       return;
     }
 
-    var chartBarWidth = Math.floor(
-      _chartWidth / _data.getDataSize()
-    ).toNumber();
+    // Use to skip drawing some values if there are more values than
+    // the chart width (e.g. 100 values for a 64px width chart)
+    var multiplier =
+      Math.floor(_data.getDataSize() / _chartWidth).toNumber() + 1;
+
+    var chartBarWidth;
+    if (_data.getDataSize() >= _chartWidth) {
+      chartBarWidth = 1;
+    } else {
+      chartBarWidth = Math.floor(_chartWidth / _data.getDataSize()).toNumber();
+    }
 
     // Move all chart bars to the right edge of the chart
-    var xOffset = _chartWidth - chartBarWidth * _data.getDataSize();
+    var xOffset =
+      _chartWidth -
+      chartBarWidth * Math.floor(_data.getDataSize() / multiplier).toNumber();
 
     // Draw chart bars
     for (var i = 0; i < _data.getDataSize(); i++) {
+      if (multiplier != 1 && i % multiplier != 0) {
+        continue; // Skip values based on the multiplier
+      }
+
       var value = _data.getData()[i];
       if (value == null) {
         continue; // Skip null values
       }
 
       // Calculate the x position based on the index
-      var x = _chartX + xOffset + chartBarWidth * i;
+      var x = _chartX + xOffset + (chartBarWidth * i) / multiplier;
       // Calculate the y position based on the value
       var y = Math.ceil(
         _chartY + _chartHeight - (value - _chartMinimum) * _yScale
@@ -144,7 +158,9 @@ class ChartDrawable extends WatchUi.Drawable {
       drawMinTriangle(
         dc,
         Math.floor(
-          _chartX + xOffset + chartBarWidth * (_data.getMinValueIndex() + 0.5)
+          _chartX +
+            xOffset +
+            chartBarWidth * (_data.getMinValueIndex() / multiplier + 0.5)
         ).toNumber(),
         yMinTriangle
       );
@@ -154,7 +170,9 @@ class ChartDrawable extends WatchUi.Drawable {
       drawMaxTriangle(
         dc,
         Math.floor(
-          _chartX + xOffset + chartBarWidth * (_data.getMaxValueIndex() + 0.5)
+          _chartX +
+            xOffset +
+            chartBarWidth * (_data.getMaxValueIndex() / multiplier + 0.5)
         ).toNumber(),
         yMaxTriangle
       );
