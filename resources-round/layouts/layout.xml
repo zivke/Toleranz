@@ -1,0 +1,47 @@
+<resources>
+	<drawable-list id="backdrop" background="Graphics.COLOR_WHITE">
+		<shape type="rectangle" x="0" y="0" width="100%" height="10%" color="Graphics.COLOR_BLACK" />
+		<shape type="rectangle" x="0" y="90%" width="100%" height="11%" color="Graphics.COLOR_BLACK" />
+	</drawable-list>
+	<layouts>
+		<layout id="MainLayout">
+			<drawable id="backdrop" />
+			<label id="clockValue" text="XX:XX" x="50%" y="5%" color="Graphics.COLOR_WHITE"
+				font="Graphics.FONT_XTINY"
+				justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
+
+			<bitmap id="StopwatchIcon" x="14%" y="20%"
+				filename="../../resources/drawables/custom_stopwatch_21px_blk_no_bkgnd.png" />
+			<label id="stopwatchValue" text="00:00" x="50%" y="23%" color="Graphics.COLOR_BLACK"
+				font="Graphics.FONT_NUMBER_MEDIUM"
+				justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
+
+			<label id="maxChartValue" text="-" x="17%" y="47%"
+				color="Graphics.COLOR_BLACK"
+				font="Graphics.FONT_XTINY"
+				justification="Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER" />
+			<bitmap id="HeartSmallBlackIcon" x="8%" y="57%"
+				filename="../../resources/drawables/custom_heart_21px_blk_no_bkgnd.png" />
+			<bitmap id="ThermometerSmallBlackIcon" x="9%" y="57%"
+				filename="../../resources/drawables/custom_thermo_11x21px_blk_no_bkgnd.png" />
+			<label id="minChartValue" text="-" x="17%" y="71%"
+				color="Graphics.COLOR_BLACK"
+				font="Graphics.FONT_XTINY"
+				justification="Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER" />
+
+			<drawable id="Chart" class="ChartDrawable">
+				<param name="color">Graphics.COLOR_BLACK</param>
+				<param name="background">Graphics.COLOR_WHITE</param>
+			</drawable>
+
+			<bitmap id="HeartSmallWhiteIcon" x="38%" y="91%"
+				filename="../../resources/drawables/custom_heart_21px_wht_no_bkgnd.png" />
+			<bitmap id="ThermometerSmallWhiteIcon" x="39%" y="91%"
+				filename="../../resources/drawables/custom_thermo_11x21px_wht_no_bkgnd.png" />
+			<label id="currentHeartRateAndTemperatureValue" text="-" x="53%" y="94%"
+				color="Graphics.COLOR_WHITE"
+				font="Graphics.FONT_XTINY"
+				justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
+		</layout>
+	</layouts>
+</resources>

@@ -60,24 +60,33 @@ class ChartDrawable extends WatchUi.Drawable {
   }
 
   function draw(dc as Dc) {
-    // Automatically determine the x location of the drawable if non provided
-    if (_chartX == 0) {
-      _chartX = Math.floor(dc.getWidth() * 0.2).toNumber();
-    }
-
-    // Automatically determine the y location of the drawable if non provided
-    if (_chartY == 0) {
-      _chartY = Math.floor(dc.getHeight() * 0.35).toNumber();
-    }
-
     // Automatically determine the width of the drawable if non provided
     if (_chartWidth == 0) {
-      _chartWidth = Math.floor(dc.getWidth() * 0.73).toNumber();
+      if (System.getDeviceSettings().screenShape == System.SCREEN_SHAPE_ROUND) {
+        // For round devices, use a smaller width to ensure the chart fits well within the screen
+        _chartWidth = Math.floor(dc.getWidth() * 0.6).toNumber();
+      } else {
+        _chartWidth = Math.floor(dc.getWidth() * 0.73).toNumber();
+      }
     }
 
     // Automatically determine the height of the drawable if non provided
     if (_chartHeight == 0) {
       _chartHeight = Math.floor(dc.getHeight() * 0.5).toNumber();
+    }
+
+    // Automatically determine the x location of the drawable if non provided
+    if (_chartX == 0) {
+      if (System.getDeviceSettings().screenShape == System.SCREEN_SHAPE_ROUND) {
+        _chartX = Math.floor((dc.getWidth() - _chartWidth) / 2).toNumber();
+      } else {
+        _chartX = Math.floor(dc.getWidth() * 0.2).toNumber();
+      }
+    }
+
+    // Automatically determine the y location of the drawable if non provided
+    if (_chartY == 0) {
+      _chartY = Math.floor(dc.getHeight() * 0.35).toNumber();
     }
 
     // Draw chart frame

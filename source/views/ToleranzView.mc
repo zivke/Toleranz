@@ -24,7 +24,7 @@ class ToleranzView extends WatchUi.View {
   // Update the view
   function onUpdate(dc as Dc) as Void {
     drawStopwatch(dc);
-    drawMainIcon(dc);
+    drawSelectorIcons(dc);
     drawCurrentTime(dc);
     drawTemperatureValues(dc);
     drawHeartRateValues(dc);
@@ -103,6 +103,19 @@ class ToleranzView extends WatchUi.View {
           maximumTemperatureLabel.setText("-");
         }
       }
+
+      // Set the current temperature label value at the bottom if present
+      var currentHeartRateAndTemperatureLabel =
+        View.findDrawableById("currentHeartRateAndTemperatureValue") as Text?;
+      if (currentHeartRateAndTemperatureLabel != null) {
+        if (currentTemperature != null) {
+          currentHeartRateAndTemperatureLabel.setText(
+            currentTemperature.format("%.1f") + "°"
+          );
+        } else {
+          currentHeartRateAndTemperatureLabel.setText("-");
+        }
+      }
     }
   }
 
@@ -140,10 +153,23 @@ class ToleranzView extends WatchUi.View {
           maxTemperatureLabel.setText("-");
         }
       }
+
+      // Set the current heart rate label value at the bottom if present
+      var currentHeartRateAndTemperatureLabel =
+        View.findDrawableById("currentHeartRateAndTemperatureValue") as Text?;
+      if (currentHeartRateAndTemperatureLabel != null) {
+        if (currentHeartRate != null) {
+          currentHeartRateAndTemperatureLabel.setText(
+            currentHeartRate.format("%d")
+          );
+        } else {
+          currentHeartRateAndTemperatureLabel.setText("-");
+        }
+      }
     }
   }
 
-  private function drawMainIcon(dc as Graphics.Dc) {
+  private function drawSelectorIcons(dc as Graphics.Dc) {
     var heartSmallBlackIcon =
       View.findDrawableById("HeartSmallBlackIcon") as Bitmap?;
     if (heartSmallBlackIcon != null) {
@@ -158,6 +184,24 @@ class ToleranzView extends WatchUi.View {
       thermometerSmallBlackIcon.setVisible(
         _state.getSelector().getType() == Selector.TEMPERATURE
       );
+    }
+
+    if (System.getDeviceSettings().screenShape == System.SCREEN_SHAPE_ROUND) {
+      var heartSmallWhiteIcon =
+        View.findDrawableById("HeartSmallWhiteIcon") as Bitmap?;
+      if (heartSmallWhiteIcon != null) {
+        heartSmallWhiteIcon.setVisible(
+          _state.getSelector().getType() == Selector.HEART_RATE
+        );
+      }
+
+      var thermometerSmallWhiteIcon =
+        View.findDrawableById("ThermometerSmallWhiteIcon") as Bitmap?;
+      if (thermometerSmallWhiteIcon != null) {
+        thermometerSmallWhiteIcon.setVisible(
+          _state.getSelector().getType() == Selector.TEMPERATURE
+        );
+      }
     }
   }
 
