@@ -66,7 +66,7 @@ class ChartDrawable extends WatchUi.Drawable {
         // For round devices, use a smaller width to ensure the chart fits well within the screen
         _chartWidth = Math.floor(dc.getWidth() * 0.6).toNumber();
       } else {
-        _chartWidth = Math.floor(dc.getWidth() * 0.73).toNumber();
+        _chartWidth = Math.floor(dc.getWidth() * 0.7).toNumber();
       }
     }
 
