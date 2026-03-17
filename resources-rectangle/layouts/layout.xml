@@ -40,6 +40,10 @@
 				<param name="background">Graphics.COLOR_WHITE</param>
 			</drawable>
 
+			<bitmap id="UpDownBlackIcon" x="92%" y="50%"
+				filename="../../resources/drawables/up_down_32px_blk.png" scaleX="6%"
+				scaleY="6%" />
+
 			<bitmap id="HeartSmallWhiteIcon" x="17%" y="91%"
 				filename="../../resources/drawables/heart_64px_wht.png" scaleX="8%"
 				scaleY="9%" />

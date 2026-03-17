@@ -55,6 +55,10 @@
 				<param name="background">Graphics.COLOR_WHITE</param>
 			</drawable>
 
+			<bitmap id="UpDownBlackIcon" x="90%" y="58%"
+				filename="../../resources/drawables/up_down_32px_blk.png" scaleX="6%"
+				scaleY="6%" />
+
 			<bitmap id="HeartSmallWhiteIcon" x="26" y="134"
 				filename="../../resources/drawables/custom_heart_21px_wht_no_bkgnd.png" />
 			<label id="currentHeartRateValue" text="-" x="48" y="142"
