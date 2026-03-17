@@ -10,8 +10,9 @@
 				font="Graphics.FONT_XTINY"
 				justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
 
-			<bitmap id="StopwatchIcon" x="14%" y="20%"
-				filename="../../resources/drawables/custom_stopwatch_21px_blk_no_bkgnd.png" />
+			<bitmap id="StopwatchIcon" x="15%" y="18%"
+				filename="../../resources/drawables/stopwatch_64px_blk.png"
+				scaleX="10%" scaleY="10%" />
 			<label id="stopwatchValue" text="00:00" x="50%" y="23%" color="Graphics.COLOR_BLACK"
 				font="Graphics.FONT_NUMBER_MEDIUM"
 				justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
@@ -20,10 +21,12 @@
 				color="Graphics.COLOR_BLACK"
 				font="Graphics.FONT_XTINY"
 				justification="Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER" />
-			<bitmap id="HeartSmallBlackIcon" x="8%" y="57%"
-				filename="../../resources/drawables/custom_heart_21px_blk_no_bkgnd.png" />
-			<bitmap id="ThermometerSmallBlackIcon" x="9%" y="57%"
-				filename="../../resources/drawables/custom_thermo_11x21px_blk_no_bkgnd.png" />
+			<bitmap id="HeartSmallBlackIcon" x="8%" y="55%"
+				filename="../../resources/drawables/heart_64px_black.png" scaleX="9%"
+				scaleY="10%" />
+			<bitmap id="ThermometerSmallBlackIcon" x="8%" y="55%"
+				filename="../../resources/drawables/thermometer_64px_blk.png"
+				scaleX="10%" scaleY="10%" />
 			<label id="minChartValue" text="-" x="17%" y="71%"
 				color="Graphics.COLOR_BLACK"
 				font="Graphics.FONT_XTINY"
@@ -34,14 +37,16 @@
 				<param name="background">Graphics.COLOR_WHITE</param>
 			</drawable>
 
-			<bitmap id="HeartSmallWhiteIcon" x="38%" y="91%"
-				filename="../../resources/drawables/custom_heart_21px_wht_no_bkgnd.png" />
-			<bitmap id="ThermometerSmallWhiteIcon" x="39%" y="91%"
-				filename="../../resources/drawables/custom_thermo_11x21px_wht_no_bkgnd.png" />
-			<label id="currentHeartRateAndTemperatureValue" text="-" x="53%" y="94%"
+			<bitmap id="HeartSmallWhiteIcon" x="36%" y="91%"
+				filename="../../resources/drawables/heart_64px_wht.png" scaleX="8%"
+				scaleY="9%" />
+			<bitmap id="ThermometerSmallWhiteIcon" x="36%" y="91%"
+				filename="../../resources/drawables/thermometer_64px_wht.png" scaleX="8%"
+				scaleY="8%" />
+			<label id="currentHeartRateAndTemperatureValue" text="-" x="48%" y="94%"
 				color="Graphics.COLOR_WHITE"
 				font="Graphics.FONT_XTINY"
-				justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
+				justification="Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER" />
 		</layout>
 	</layouts>
 </resources>
